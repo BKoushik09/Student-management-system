@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #ffffff, #dff6ff);
+            padding: 30px;
+        }
+        .container {
+            width: 500px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px lightgray;
+        }
+        h1 {
+            text-align: center;
+            color: #0284c7;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: 1px solid #7dd3fc;
+            border-radius: 8px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #0284c7;
+        }
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .add-btn:hover {
+            background: #0284c7;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .student-card {
+            background: #f0f9ff;
+            border-left: 5px solid #0ea5e9;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+        .student-card h3 {
+            color: #0369a1;
+            margin-bottom: 8px;
+        }
+        .student-card p {
+            margin: 5px 0;
+            color: #444;
+        }
+        .delete-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .count-box {
+            margin-top: 20px;
+            background: #0ea5e9;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Management</h1>
+        <form id="studentForm">
+            <input type="text" id="name" placeholder="Enter Name">
+            <input type="number" id="age" placeholder="Enter Age">
+            <input type="text" id="course" placeholder="Enter Course">
+            <button class="add-btn">
+                Add Student
+            </button>
+            <p class="error" id="error"></p>
+        </form>
+        <div class="count-box">
+            Total Students :
+            <span id="count">0</span>
+        </div>
+        <div id="studentList"></div>
+    </div>
+    <script>
+        let students = []
+        const form = document.getElementById("studentForm")
+        const studentList = document.getElementById("studentList")
+        const error = document.getElementById("error")
+        const count = document.getElementById("count")
+        form.onsubmit = function (e) {
+            e.preventDefault()
+            const name = document.getElementById("name").value
+            const age = document.getElementById("age").value
+            const course = document.getElementById("course").value
+            const regex = /^[A-Za-z ]{3,}$/
+            if (!regex.test(name)) {
+                error.innerText = "Name must contain minimum 3 letters"
+                return
+            }
+            error.innerText = ""
+            students.push({
+                name,
+                age,
+                course
+            })
+            displayStudents()
+            form.reset()
+        }
+        function displayStudents() {
+            studentList.innerHTML = ""
+            count.innerText = students.length
+            students.map((student, index) => {
+                studentList.innerHTML += `
+                <div class="student-card">
+                    <h3>${student.name}</h3>
+                    <p>Age : ${student.age}</p>
+                    <p>Course : ${student.course}</p>
+                    <button class="delete-btn" onclick="deleteStudent(${index})">
+                        Delete
+                    </button>
+                </div>
+
+                `
+            })
+        }
+        function deleteStudent(index) {
+            students.splice(index, 1)
+            displayStudents()
+        }
+    </script>
+</body>
+</html>
